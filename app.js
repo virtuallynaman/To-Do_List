@@ -7,6 +7,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 
 let items = [];
+let workItems = [];
 
 app.get("/", (req, res)=> {
     let today = new Date();
@@ -20,9 +21,19 @@ app.get("/", (req, res)=> {
 });
 
 app.post("/", (req, res)=>{
+    if (req.body.list === "Work List") {
+        workItems.push(req.body.addItem);
+        res.redirect("/work");
+    } else {
         items.push(req.body.addItem);
         res.redirect("/");
+    }
+    console.log(req.body.list);
 });
+
+app.get("/work", (req, res)=>{
+    res.render("list", { listTitle: "Work List", listItems: workItems })
+})
 
 app.get("/about", (req, res)=>{
     res.render("about");

@@ -1,4 +1,5 @@
 const express = require("express");
+const date = require("./date");
 const app = express();
 
 app.use(express.urlencoded({extended:true}));
@@ -6,17 +7,11 @@ app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 
-let items = [];
-let workItems = [];
+const items = [];
+const workItems = [];
 
 app.get("/", (req, res)=> {
-    let today = new Date();
-    let options = {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric'
-    }
-    let day = today.toLocaleDateString("en-US", options)
+    const day = date.getDate();
     res.render("list", { listTitle: day, listItems: items });
 });
 
@@ -28,7 +23,6 @@ app.post("/", (req, res)=>{
         items.push(req.body.addItem);
         res.redirect("/");
     }
-    console.log(req.body.list);
 });
 
 app.get("/work", (req, res)=>{
